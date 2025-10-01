@@ -1,15 +1,19 @@
 import { google } from "googleapis";
 import fs from "fs";
 import dotenv from "dotenv";
+import { JWT } from "google-auth-library";
 
 dotenv.config();
 
-const credentials = JSON.parse(fs.readFileSync("google-application-credentials.json", "utf8"));
+const keys = JSON.parse(fs.readFileSync("google-application-credentials.json", "utf8"));
 
-const auth = new google.auth.GoogleAuth({
-  credentials,
+const authClient = new JWT({
+  email: keys.client_email,
+  key: keys.private_key,
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
+
+const auth = new google.auth.GoogleAuth({authClient});
 
 async function saveToGoogleSheet(data) {
   const sheets = google.sheets({ version: "v4", auth });
