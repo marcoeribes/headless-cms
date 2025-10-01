@@ -1,0 +1,16 @@
+{
+  "name": "school-cms",
+  "version": "1.0.0",
+  "description": "Headless CMS for Traffic Survival School",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "googleapis": "^161.0.0"
+  }
+}
