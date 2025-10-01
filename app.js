@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const credentials = JSON.parse(fs.readFileSync("google-service-account-key.json", "utf8"));
+const credentials = JSON.parse(fs.readFileSync("google-application-credentials.json", "utf8"));
 
 const auth = new google.auth.GoogleAuth({
   credentials,
