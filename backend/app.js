@@ -1,43 +1,8 @@
-import { google } from "googleapis";
-import fs from "fs";
 import dotenv from "dotenv";
-import { JWT } from "google-auth-library";
+import * as ga from "./google-api.js";
 
 dotenv.config();
-
-const keys = JSON.parse(fs.readFileSync("google-application-credentials.json", "utf8"));
-
-const authClient = new JWT({
-  email: keys.client_email,
-  key: keys.private_key,
-  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-});
-
-const auth = new google.auth.GoogleAuth({authClient});
-
-async function saveToGoogleSheet(data) {
-  const sheets = google.sheets({ version: "v4", auth });
-
-  const values = data.map((item) => [
-    item.firstName,
-    item.lastName,
-    item.email,
-    item.phone,
-    item.plan,
-    item.premium_amount,
-    item.start_policy_date,
-    item.end_policy_date,
-  ]);
-
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range: "Sheet1!A2", // Adjust based on your sheet structure
-    valueInputOption: "RAW",
-    requestBody: { values },
-  });
-
-  console.log("Data saved successfully!");
-}
+await ga.listCalendarEvents();
 
 const exampleData = [
   {
@@ -52,6 +17,5 @@ const exampleData = [
   },
 ];
 
-console.log("hey!");
+ga.saveToGoogleSheet(exampleData).catch(console.error);
 
-saveToGoogleSheet(exampleData).catch(console.error);
