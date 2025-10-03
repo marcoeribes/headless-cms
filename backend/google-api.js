@@ -29,7 +29,7 @@ export async function listCalendarEvents() {
   const calendar = google.calendar({version: 'v3', auth});
   
   const result = await calendar.events.list({
-    calendarId: "marcoeribes@gmail.com",
+    calendarId: process.env.GOOGLE_CALENDAR_ID,
     timeMin: new Date().toISOString(),
     maxResults: 10,
     singleEvents: true,
