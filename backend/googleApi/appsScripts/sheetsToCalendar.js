@@ -3,6 +3,7 @@
 */
 
 const CALENDAR_ID = 'your calendar ID'
+const WEBSITE = 'your website'
 
 function createorUpdateEvents() {
 
