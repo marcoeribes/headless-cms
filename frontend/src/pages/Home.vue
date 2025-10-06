@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import GoogleCalendar from '../components/GoogleCalendar.vue';
+import DataView from '@/components/DataView.vue';
 import { useStore } from '@/store.js';
 import { storeToRefs } from 'pinia';
 import Listbox from 'primevue/listbox';
@@ -8,10 +9,6 @@ import Listbox from 'primevue/listbox';
 const store = useStore();
 const { classes } = storeToRefs(store);
 const router = useRouter();
-
-function goToAbout() {
-  router.push('/about');
-}
 
 function onClassSelect(event) {
   const selectedItem = event.value;
@@ -38,10 +35,8 @@ function onClassSelect(event) {
       Don’t miss out—
       Sign up today and take the next step forward.
     </p>
-    <button @click="goToAbout">Go to About</button>
-
+    <DataView />
     <GoogleCalendar />
-
     <div>
       <Listbox 
         v-model="selectedClass" 
@@ -52,33 +47,8 @@ function onClassSelect(event) {
         :filter="true"
         filterPlaceholder="Search classes"
       >
-        <!-- slot content here, if using custom item templates -->
       </Listbox>
     </div>
   </div>
 </template>
-
-<style scoped>
-
-button {
-  margin-bottom: 2rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #2563eb;
-}
-
-div > .p-listbox {
-  margin: 2rem auto 0 auto;
-  max-width: 300px;
-}
-</style>
 

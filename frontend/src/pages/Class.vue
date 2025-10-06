@@ -46,7 +46,7 @@ const mapUrl = computed(() => {
         <strong>Price:</strong> {{ c.price }}
       </p>
       <p>
-        <i class="pi pi-calendar"></i>
+        <i class="pi pi-map-marker"></i>
         <strong>Location:</strong> {{ c.location || 'N/A' }}
       </p>
       <p>
