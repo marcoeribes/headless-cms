@@ -14,8 +14,7 @@ import Panel from 'primevue/panel';
             on your situation.
         </p>
 
-        <img :src="faqImage" alt="FAQ" Template Class="faq-image"/>
-
+        <img :src="faqImage" alt="FAQ" Template Class="standard-image"/>
 
         <h4>What is the difference between Template Class and [Alternative Program]?</h4>
         <p>
@@ -106,13 +105,6 @@ import Panel from 'primevue/panel';
 </template>
 
 <style scoped>
-  .faq-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 1rem 0;
-  }
-
   .page-container p {
     margin-top: 0;
     margin-bottom: 2.5rem;

@@ -19,7 +19,7 @@ import aboutUsImage from '@/assets/images/about-us.webp';
       designed to be meaningful, enjoyable, and impactful.
     </p>
 
-  <img :src="aboutUsImage" alt="About Us" class="about-image"/>
+  <img :src="aboutUsImage" alt="About Us" class="standard-image"/>
 
     <h2>Our Mission</h2>
     <p>
@@ -42,12 +42,3 @@ import aboutUsImage from '@/assets/images/about-us.webp';
     <p>Thank you for choosing our program. We look forward to welcoming you to one of our upcoming classes or events.</p>
   </div>
 </template>
-
-<style scoped>
-  .about-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 1rem 0;
-  }
-</style>
