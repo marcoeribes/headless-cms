@@ -6,6 +6,9 @@ import { addTimeProperties } from "./service.js";
 
 dotenv.config();
 
+const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
+
+
 const fastify = Fastify({
   logger: true
 })
@@ -25,6 +28,17 @@ fastify.get('/api/getEvents', async (req, res) => {
     res.code(500).send({ success: false, message: 'Failed to fetch sheets data' });
   }
 });
+
+fastify.get('/api/getCalendarId', async (req, res) => {
+  try {
+    console.log("Calendar ID:", GOOGLE_CALENDAR_ID);
+    return { success: true, data: GOOGLE_CALENDAR_ID};
+  } catch (error) {
+    req.log.error(error);
+    res.code(500).send({ success: false, message: 'Failed to fetch calendar Id' });
+  }
+});
+
 
 const start = async () => {
   try {
