@@ -2,6 +2,12 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 export const useStore = defineStore('classes', () => {
+  
+  const contact = ref({
+    name: "John Doe",
+    email: "johndoe@email.com",
+    phone: "(808) 808-8008"
+  });
   const classes = ref([]);
 
   function getClasses() {
@@ -9,7 +15,6 @@ export const useStore = defineStore('classes', () => {
       .then(response => response.json())
       .then(responseBody => {
         classes.value = responseBody.data;
-        return data;
       })
       .catch((error) => {
         console.log(error);
@@ -17,6 +22,7 @@ export const useStore = defineStore('classes', () => {
   }
 
   return {
+    contact,
     classes,
     getClasses
   }

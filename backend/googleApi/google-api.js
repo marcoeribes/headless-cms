@@ -6,7 +6,7 @@ export async function getSheetEvents() {
     
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.GOOGLE_SHEET_ID,
-      range: "Events!A2:K999", 
+      range: "Events!A2:L999", 
     });
     
     const rows = response.data.values; 
@@ -29,6 +29,7 @@ export async function getSheetEvents() {
         attendees: row[8],
         color: row[9],
         status: row[10],
+        imageUrl: row[11]
       }
       events.push(event);
     });

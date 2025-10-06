@@ -82,6 +82,10 @@ const mapUrl = computed(() => {
         allowfullscreen
       ></iframe>
     </div>
+
+    <div v-if="c?.location" style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;">
+      <img :src="c.imageUrl" alt="location image" class="standard-image"/>
+    </div>
   </div>
 </template>
 
