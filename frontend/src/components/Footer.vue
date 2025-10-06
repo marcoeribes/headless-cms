@@ -1,17 +1,28 @@
 <template>
-  <footer class="p-d-flex p-jc-center p-ai-center p-shadow-2" style="height: 60px; background-color: #f4f4f4;">
-    <p class="p-m-0">&copy; 2025 Your Company. All rights reserved.</p>
+  <footer class="footer">
+    <p class="footer-text">&copy; 2025 School CMS. All rights reserved.</p>
   </footer>
 </template>
 
-<script>
-export default {
-  name: 'AppFooter',
-};
+<script setup>
+defineOptions({
+  name: 'AppFooter'
+});
 </script>
 
 <style scoped>
-footer {
+.footer {
   width: 100%;
+  height: 100px; /* More conventional height */
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
 }
 </style>

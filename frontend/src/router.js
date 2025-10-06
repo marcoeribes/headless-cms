@@ -1,19 +1,20 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import HomeView from './pages/HomeView.vue'
-import AboutView from './pages/AboutView.vue'
-import Class from './pages/Class.vue'
+import Home from './pages/Home.vue';
+import About from './pages/About.vue';
+import Faq from './pages/FAQ.vue';
+import Class from './pages/Class.vue';
 
 const routes = [
-  { path: '/', name: 'home', component: HomeView },
-  { path: '/about', name: 'about', component: AboutView },
+  { path: '/', name: 'home', component: Home },
+  { path: '/about', name: 'about', component: About },
+  { path: '/faq', name: 'faq', component: Faq },
   { path: '/class/:id', name: 'class', component: Class },
-
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+});
 
 export default router;
