@@ -1,21 +1,35 @@
 import dotenv from "dotenv";
-import * as ga from "./google-api.js";
+import * as ga from "./googleApi/google-api.js";
+import Fastify from "fastify";
+import cors from '@fastify/cors'
 
 dotenv.config();
-await ga.listCalendarEvents();
 
-const exampleData = [
-  {
-    firstName: "John",
-    lastName: "Doe",
-    email: "johndoe@example.com",
-    phone: "+1234567890",
-    plan: "Gold Plan",
-    premium_amount: 50000,
-    start_policy_date: "2025-01-01",
-    end_policy_date: "2026-01-01",
-  },
-];
+const fastify = Fastify({
+  logger: true
+})
 
-ga.saveToGoogleSheet(exampleData).catch(console.error);
+await fastify.register(cors, {
+  origin: 'http://localhost:3000'
+})
 
+fastify.get('/api/getEvents', async (req, res) => {
+  try {
+    const calendar = await ga.getSheetEvents();
+    return { success: true, data: calendar };
+  } catch (error) {
+    req.log.error(error);
+    res.code(500).send({ success: false, message: 'Failed to fetch sheets data' });
+  }
+});
+
+
+const start = async () => {
+  try {
+    await fastify.listen({ port: 3000 })
+  } catch (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+}
+start();
