@@ -4,11 +4,11 @@
 </script>
 
 <template>
-  <div style="max-width: 800px; margin: 0 auto;">
+  <div style="max-width: 1000px; margin: 0 auto;">
     <div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 75%;">
       <iframe  
         :src="calendarUrl"
-        style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" 
+        style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0; border-radius: 12px;" 
         allowfullscreen>
       </iframe>
     </div>

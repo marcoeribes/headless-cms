@@ -1,54 +1,48 @@
 <script setup>
-import { useRouter } from 'vue-router';
 import GoogleCalendar from '../components/GoogleCalendar.vue';
 import DataView from '@/components/DataView.vue';
-import { useStore } from '@/store.js';
-import { storeToRefs } from 'pinia';
-import Listbox from 'primevue/listbox';
-
-const store = useStore();
-const { classes } = storeToRefs(store);
-const router = useRouter();
-
-function onClassSelect(event) {
-  const selectedItem = event.value;
-
-  if (selectedItem && selectedItem.id) {
-    router.push({ 
-      name: 'class', 
-      params: { id: selectedItem.id } 
-    });
-  }
-}
+import Card from 'primevue/card';
 </script>
 
 <template>
-  <div class="page-container">
-    <h2>Welcome</h2>
-    <p>
-      We offer convenient, flexible, and affordable options to help you meet your goals. Whether in-person or online, our programs are designed to be accessible and easy to follow.
+  <div class="container mx-auto px-4 py-12 max-w-[1000px]">
+    <Card>
+      <template #title>
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Welcome</h2>
+      </template>
 
-      Led by knowledgeable and dedicated instructors, our sessions provide a supportive and engaging learning environment.
+      <template #content>
+        <div class="text-center max-w-prose mx-auto space-y-6">
+          <p class="text-gray-700 leading-relaxed mb-8 whitespace-pre-line">
+            We offer convenient, flexible, and affordable options to help you meet your goals. Whether in-person or online, our programs are designed to be accessible and easy to follow.
 
-      If participation is required or recommended, registering early helps ensure you stay on track and meet any necessary requirements.
+            Led by knowledgeable and dedicated instructors, our sessions provide a supportive and engaging learning environment.
 
-      Don’t miss out—
-      Sign up today and take the next step forward.
-    </p>
-    <DataView />
-    <GoogleCalendar />
-    <div>
-      <Listbox 
-        v-model="selectedClass" 
-        :options="classes" 
-        optionLabel="title" 
-        @change="onClassSelect" 
-        class="w-full md:w-56" 
-        :filter="true"
-        filterPlaceholder="Search classes"
-      >
-      </Listbox>
-    </div>
+            If participation is required or recommended, registering early helps ensure you stay on track and meet any necessary requirements.
+
+            Don’t miss out—  
+            Sign up today and take the next step forward.
+          </p>
+        </div>
+
+        <div class="mb-8">
+          <DataView />
+        </div>
+
+        <div>
+          <GoogleCalendar />
+        </div>
+      </template>
+    </Card>
   </div>
 </template>
 
+<style scoped>
+
+/* Override PrimeVue Card styles for seamless background */
+.p-card {
+  background-color: #f9f9f9 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+</style>

@@ -23,6 +23,7 @@ function goToClassDetails(item) {
 
 <template>
     <div class="card">
+        <h3 class="text-xxl text-gray-800">Upcoming Classes</h3>
         <DataView :value="classes" paginator :rows="5" :layout="layout">
             <template #list="slotProps">
                 <div class="flex flex-col">
