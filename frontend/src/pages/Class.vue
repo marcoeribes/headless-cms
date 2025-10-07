@@ -5,6 +5,7 @@ import { useStore } from '@/store.js';
 import { storeToRefs } from 'pinia';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
+import Divider from 'primevue/divider';
 import 'primeicons/primeicons.css';
 
 const store = useStore();
@@ -44,22 +45,33 @@ const mapUrl = computed(() => {
             <template #content>
               <p>
                 <i class="pi pi-info-circle"></i>
-                <strong>Description:</strong><br />
                 {{ c.description }}
               </p>
+
+              <Divider align="center" type="solid">
+                  <b>Details</b>
+              </Divider>
               <p>
                 <i class="pi pi-calendar"></i>
                 <strong>Date:</strong> {{ c.month }} {{ c.day }} @ {{ c.startTime }} - {{ c.endTime }}
               </p>
+
+              <p>
+                <i class="pi pi-map-marker"></i>
+                <strong>Location:</strong>
+                {{ c.location || 'N/A' }}
+              </p>
+              
               <p>
                 <i class="pi pi-credit-card"></i>
                 <strong>Price:</strong> {{ c.price }}
               </p>
-              <p>
-                <i class="pi pi-map-marker"></i>
-                <strong>Location:</strong><br />
-                {{ c.location || 'N/A' }}
-              </p>
+
+              
+              <Divider align="center" type="solid">
+                  <b>Contact Info</b>
+              </Divider>
+
               <p>
                 <i class="pi pi-envelope"></i>
                 <strong>Email:</strong> {{ contact.email }}
