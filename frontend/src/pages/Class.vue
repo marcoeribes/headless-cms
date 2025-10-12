@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue'; 
-import { useRoute } from 'vue-router'; 
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from '@/store.js';
 import { storeToRefs } from 'pinia';
 import Button from 'primevue/button';
@@ -14,116 +14,135 @@ const { classes, contact } = storeToRefs(store);
 const classId = computed(() => route.params.id);
 
 const c = computed(() => {
-  if (classes.value && classId.value) {
-    return classes.value.find(item => item.id === classId.value);
-  }
-  return null; 
+    if (classes.value && classId.value) {
+        return classes.value.find((item) => item.id === classId.value);
+    }
+    return null;
 });
 
 const mapUrl = computed(() => {
-  if (c.value?.location) {
-    const encodedLocation = encodeURIComponent(c.value.location);
-    return `https://maps.google.com/maps?q=${encodedLocation}&output=embed`;
-  }
-  return '';
+    if (c.value?.location) {
+        const encodedLocation = encodeURIComponent(c.value.location);
+        return `https://maps.google.com/maps?q=${encodedLocation}&output=embed`;
+    }
+    return '';
 });
 
+const router = useRouter();
+function goToRegistration(c) {
+    router.push({
+        name: 'register',
+        params: { id: c.id },
+    });
+}
 </script>
 
 <template>
-  <div class="page-container px-4 py-6 flex justify-center">
-    <div class="flex flex-col lg:flex-row gap-6  max-w-[1200px]">
+    <div class="page-container px-4 py-6 flex justify-center">
+        <div class="flex flex-col lg:flex-row gap-6 max-w-[1200px]">
+            <!-- Left Column -->
+            <div class="lg:w-5/8 w-full flex flex-col">
+                <div v-if="c" class="flex-1">
+                    <Card class="h-full max-w-[600px] flex flex-col">
+                        <template #title>
+                            {{ c.title }}
+                        </template>
 
-      <!-- Left Column -->
-      <div class="lg:w-5/8 w-full flex flex-col">
-        <div v-if="c" class="flex-1">
-          <Card class="h-full max-w-[600px] flex flex-col">
-            <template #title>
-              {{ c.title }}
-            </template>
+                        <template #content>
+                            <p>
+                                <i class="pi pi-info-circle"></i>
+                                {{ c.description }}
+                            </p>
 
-            <template #content>
-              <p>
-                <i class="pi pi-info-circle"></i>
-                {{ c.description }}
-              </p>
+                            <Divider align="center" type="solid">
+                                <b>Details</b>
+                            </Divider>
+                            <p>
+                                <i class="pi pi-calendar"></i>
+                                <strong>Date:</strong> {{ c.month }}
+                                {{ c.day }} @ {{ c.startTime }} -
+                                {{ c.endTime }}
+                            </p>
 
-              <Divider align="center" type="solid">
-                  <b>Details</b>
-              </Divider>
-              <p>
-                <i class="pi pi-calendar"></i>
-                <strong>Date:</strong> {{ c.month }} {{ c.day }} @ {{ c.startTime }} - {{ c.endTime }}
-              </p>
+                            <p>
+                                <i class="pi pi-map-marker"></i>
+                                <strong>Location:</strong>
+                                {{ c.location || 'N/A' }}
+                            </p>
 
-              <p>
-                <i class="pi pi-map-marker"></i>
-                <strong>Location:</strong>
-                {{ c.location || 'N/A' }}
-              </p>
-              
-              <p>
-                <i class="pi pi-credit-card"></i>
-                <strong>Price:</strong> {{ c.price }}
-              </p>
+                            <p>
+                                <i class="pi pi-credit-card"></i>
+                                <strong>Price:</strong> {{ c.price }}
+                            </p>
 
-              
-              <Divider align="center" type="solid">
-                  <b>Contact Info</b>
-              </Divider>
+                            <Divider align="center" type="solid">
+                                <b>Contact Info</b>
+                            </Divider>
 
-              <p>
-                <i class="pi pi-envelope"></i>
-                <strong>Email:</strong> {{ contact.email }}
-              </p>
-              <p>
-                <i class="pi pi-phone"></i>
-                <strong>Call or Text:</strong> {{ contact.phone }}
-              </p>
+                            <p>
+                                <i class="pi pi-envelope"></i>
+                                <strong>Email:</strong> {{ contact.email }}
+                            </p>
+                            <p>
+                                <i class="pi pi-phone"></i>
+                                <strong>Call or Text:</strong>
+                                {{ contact.phone }}
+                            </p>
 
-              <Button 
-                type="button" 
-                label="Register" 
-                size="large" 
-                aria-label="Register" 
-                :loading="loading" 
-                @click="load" 
-                class="mt-4"
-              />
-            </template>
-          </Card>
+                            <Button
+                                type="button"
+                                label="Register"
+                                size="large"
+                                aria-label="Register"
+                                :loading="loading"
+                                @click="goToRegistration(c.id)"
+                                class="mt-4"
+                            />
+                        </template>
+                    </Card>
+                </div>
+
+                <div v-else-if="classes.length === 0">
+                    <p>Loading class data...</p>
+                </div>
+                <div v-else>
+                    <p>
+                        Class with ID <strong>{{ classId }}</strong> not found.
+                    </p>
+                </div>
+            </div>
+
+            <div
+                v-if="c"
+                class="lg:w-3/8 w-full flex flex-col justify-evenly items-center gap-4"
+            >
+                <div
+                    v-if="c.imageUrl"
+                    class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative"
+                >
+                    <img
+                        :src="c.imageUrl"
+                        alt="Location image"
+                        class="w-full h-full object-cover rounded-xl"
+                    />
+                </div>
+                <div
+                    v-if="c.location"
+                    class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative"
+                >
+                    <iframe
+                        :src="mapUrl"
+                        class="absolute top-0 left-0 w-full h-full border-0 rounded-xl"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            </div>
         </div>
-
-        <div v-else-if="classes.length === 0">
-          <p>Loading class data...</p>
-        </div>
-        <div v-else>
-          <p>Class with ID <strong>{{ classId }}</strong> not found.</p>
-        </div>
-      </div>
-
-      <div v-if="c" class="lg:w-3/8 w-full flex flex-col justify-evenly items-center gap-4">
-        <div v-if="c.imageUrl" class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative">
-          <img 
-            :src="c.imageUrl" 
-            alt="Location image" 
-            class="w-full h-full object-cover rounded-xl" 
-          />
-        </div>
-        <div v-if="c.location" class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative">
-          <iframe
-            :src="mapUrl"
-            class="absolute top-0 left-0 w-full h-full border-0 rounded-xl"
-            allowfullscreen
-          ></iframe>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
 .page-container i {
-  margin-right: 0.5rem;
+    margin-right: 0.5rem;
 }
 </style>
