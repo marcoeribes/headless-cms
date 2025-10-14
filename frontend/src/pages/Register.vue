@@ -28,7 +28,6 @@ const c = computed(() => {
 });
 
 const initialValues = ref({
-    username: '',
     firstName: '',
     middleInitial: '',
     lastName: '',
@@ -39,25 +38,40 @@ const initialValues = ref({
     caseNumber: '',
 });
 
-const onFormSubmit = ({ valid }) => {
+const onFormSubmit = ({ valid, values }) => {
     if (valid) {
-        toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
+        console.log('✅ Form submitted successfully:', values);
     }
 };
 
 const resolver = ({ values }) => {
     const errors = {};
 
-    if (!values.username) {
-        errors.username = [{ message: 'Username is required.' }];
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const numericPattern = /^\d+$/;
+
+    const requiredFields = ['options', 'firstName', 'lastName', 'dob', 'phone', 'email', 'dlNumber', 'caseNumber'];
+
+    requiredFields.forEach((field) => {
+        if (!values[field] || values[field].toString().trim() === '') {
+            errors[field] = [{ message: `${field} is required.` }];
+        }
+    });
+
+    if (values.dob && !values.dob.replace(/\D/g, '').match(numericPattern)) {
+        errors.dob = [{ message: 'Date of Birth must contain only numbers.' }];
     }
 
-    if (!values.username) {
-        errors.username = [{ message: 'Username is required.' }];
+    if (values.phone && !values.phone.replace(/\D/g, '').match(numericPattern)) {
+        errors.phone = [{ message: 'Phone number must contain only numbers.' }];
+    }
+
+    if (values.email && !emailPattern.test(values.email)) {
+        errors.email = [{ message: 'Invalid email address.' }];
     }
 
     return {
-        values, // (Optional) Used to pass current form values to submit event.
+        values,
         errors,
     };
 };
@@ -135,62 +149,100 @@ const resolver = ({ values }) => {
                                 <label for="option2" class="text-gray-700 dark:text-white">Option 2</label>
                             </div>
                         </RadioButtonGroup>
+                        <Message v-if="$form.options?.invalid" severity="error" size="small" variant="simple">{{
+                            $form.options.error?.message
+                        }}</Message>
                     </div>
 
                     <!-- Input Fields Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FloatLabel variant="on">
-                            <InputText id="firstName" v-model="$form.firstName" maxlength="35" autocomplete="off" />
-                            <label for="firstName">First Name</label>
-                        </FloatLabel>
+                        <!-- First Name -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputText id="firstName" name="firstName" maxlength="35" autocomplete="off" />
+                                <label for="firstName">First Name</label>
+                            </FloatLabel>
+                            <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.firstName.error?.message }}
+                            </Message>
+                        </div>
 
-                        <FloatLabel variant="on">
-                            <InputText
-                                id="middleInitial"
-                                v-model="$form.middleInitial"
-                                maxlength="1"
-                                autocomplete="off"
-                            />
-                            <label for="middleInitial">Middle Initial</label>
-                        </FloatLabel>
+                        <!-- Middle Initial -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputText id="middleInitial" name="middleInitial" maxlength="1" autocomplete="off" />
+                                <label for="middleInitial">Middle Initial</label>
+                            </FloatLabel>
+                            <Message v-if="$form.middleInitial?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.middleInitial.error?.message }}
+                            </Message>
+                        </div>
 
-                        <FloatLabel variant="on">
-                            <InputText id="lastName" v-model="$form.lastName" maxlength="35" autocomplete="off" />
-                            <label for="lastName">Last Name</label>
-                        </FloatLabel>
+                        <!-- Last Name -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputText id="lastName" name="lastName" maxlength="35" autocomplete="off" />
+                                <label for="lastName">Last Name</label>
+                            </FloatLabel>
+                            <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.lastName.error?.message }}
+                            </Message>
+                        </div>
 
-                        <FloatLabel variant="on">
-                            <InputMask id="dob" v-model="$form.dob" mask="99/99/9999" />
-                            <label for="dob">Date of Birth</label>
-                        </FloatLabel>
+                        <!-- Date of Birth -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputMask id="dob" name="dob" mask="99/99/9999" />
+                                <label for="dob">Date of Birth</label>
+                            </FloatLabel>
+                            <Message v-if="$form.dob?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.dob.error?.message }}
+                            </Message>
+                        </div>
 
-                        <FloatLabel variant="on">
-                            <InputMask id="phone" v-model="$form.phone" mask="(999) 999-9999" />
-                            <label for="phone">Phone Number</label>
-                        </FloatLabel>
+                        <!-- Phone Number -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputMask id="phone" name="phone" mask="(999) 999-9999" />
+                                <label for="phone">Phone Number</label>
+                            </FloatLabel>
+                            <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.phone.error?.message }}
+                            </Message>
+                        </div>
 
-                        <FloatLabel variant="on">
-                            <InputText id="email" v-model="$form.email" type="email" autocomplete="off" />
-                            <label for="email">Email Address</label>
-                        </FloatLabel>
+                        <!-- Email Address -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputText id="email" name="email" type="email" autocomplete="off" />
+                                <label for="email">Email Address</label>
+                            </FloatLabel>
+                            <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.email.error?.message }}
+                            </Message>
+                        </div>
 
-                        <FloatLabel variant="on">
-                            <InputText id="dlNumber" v-model="$form.dlNumber" maxlength="9" autocomplete="off" />
-                            <label for="dlNumber">AZ Driver License #</label>
-                        </FloatLabel>
+                        <!-- Driver License # -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputText id="dlNumber" name="dlNumber" maxlength="9" autocomplete="off" />
+                                <label for="dlNumber">Driver License #</label>
+                            </FloatLabel>
+                            <Message v-if="$form.dlNumber?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.dlNumber.error?.message }}
+                            </Message>
+                        </div>
 
-                        <FloatLabel variant="on">
-                            <InputText id="caseNumber" v-model="$form.caseNumber" autocomplete="off" />
-                            <label for="caseNumber">Case #</label>
-                        </FloatLabel>
-
-                        <FloatLabel variant="on">
-                            <InputText name="username" type="text" fluid />
-                            <label for="caseNumber">Case #</label>
-                        </FloatLabel>
-                        <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{
-                            $form.username.error?.message
-                        }}</Message>
+                        <!-- Case Number -->
+                        <div class="flex flex-col gap-1">
+                            <FloatLabel variant="on">
+                                <InputText id="caseNumber" name="caseNumber" autocomplete="off" />
+                                <label for="caseNumber">Case #</label>
+                            </FloatLabel>
+                            <Message v-if="$form.caseNumber?.invalid" severity="error" size="small" variant="simple">
+                                {{ $form.caseNumber.error?.message }}
+                            </Message>
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
