@@ -1,29 +1,27 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { getClasses } from '@/api/events.js';
 
 export const useStore = defineStore('classes', () => {
-  
-  const contact = ref({
-    name: "John Doe",
-    email: "johndoe@email.com",
-    phone: "(808) 808-8008"
-  });
-  const classes = ref([]);
+    const contact = ref({
+        name: 'John Doe',
+        email: 'johndoe@email.com',
+        phone: '(808) 808-8008',
+    });
+    const classes = ref([]);
 
-  function getClasses() {
-    fetch('http://localhost:3000/api/getEvents')
-      .then(response => response.json())
-      .then(responseBody => {
-        classes.value = responseBody.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+    async function loadClasses() {
+        try {
+            const data = await getClasses();
+            classes.value = data;
+        } catch (error) {
+            console.error('Error loading classes:', error);
+        }
+    }
 
-  return {
-    contact,
-    classes,
-    getClasses
-  }
+    return {
+        contact,
+        classes,
+        loadClasses,
+    };
 });

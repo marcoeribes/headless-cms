@@ -1,15 +1,14 @@
 <script setup>
-import Footer from './components/Footer.vue'
-import Navigation from './components/Navigation.vue'
+import Footer from './components/Footer.vue';
+import Navigation from './components/Navigation.vue';
 import { useStore } from '@/store.js';
 
 const store = useStore();
-store.getClasses();
-
+store.loadClasses();
 </script>
 
 <template>
-  <Navigation />
-  <RouterView />
-  <Footer />
+    <Navigation />
+    <RouterView />
+    <Footer />
 </template>

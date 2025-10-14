@@ -12,7 +12,7 @@ import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
 import RadioButton from 'primevue/radiobutton';
 import RadioButtonGroup from 'primevue/radiobuttongroup';
-import Calendar from 'primevue/calendar';
+import { postRegistration } from '@/api/events';
 
 const store = useStore();
 const route = useRoute();
@@ -28,6 +28,7 @@ const c = computed(() => {
 });
 
 const initialValues = ref({
+    option: '',
     firstName: '',
     middleInitial: '',
     lastName: '',
@@ -38,9 +39,16 @@ const initialValues = ref({
     caseNumber: '',
 });
 
-const onFormSubmit = ({ valid, values }) => {
-    if (valid) {
-        console.log('✅ Form submitted successfully:', values);
+const onFormSubmit = async ({ valid, values }) => {
+    if (!valid) return;
+
+    values.eventId = classId.value;
+
+    try {
+        const response = await postRegistration(values);
+        console.log('✅ Registration successful:', response);
+    } catch (error) {
+        console.error('❌ Registration failed:', error);
     }
 };
 
@@ -139,7 +147,7 @@ const resolver = ({ values }) => {
                         <label class="block mb-2 font-medium text-sm text-gray-700 dark:text-white"
                             >Select an Option</label
                         >
-                        <RadioButtonGroup name="options" class="flex flex-wrap gap-6">
+                        <RadioButtonGroup name="option" class="flex flex-wrap gap-6">
                             <div class="flex items-center gap-2">
                                 <RadioButton inputId="option1" value="option1" />
                                 <label for="option1" class="text-gray-700 dark:text-white">Option 1</label>
