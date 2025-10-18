@@ -7,6 +7,8 @@ import { addTimeProperties, idGenerator } from "./service.js";
 dotenv.config();
 
 const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
+const DOMAIN = "http://localhost:5173";
+STRIPE_KEY = process.env.STRIPE_KEY;
 
 const fastify = Fastify({
   logger: true,
@@ -15,6 +17,8 @@ const fastify = Fastify({
 await fastify.register(cors, {
   origin: "http://localhost:5173",
 });
+
+const stripe = new Stripe(STRIPE_KEY);
 
 fastify.get("/api/getEvents", async (req, res) => {
   try {
