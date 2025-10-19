@@ -48,8 +48,6 @@ fastify.post("/api/postRegistration", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
 fastify.post("/api/create-checkout-session", async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     line_items: [
@@ -73,7 +71,6 @@ fastify.post("/api/create-checkout-session", async (req, res) => {
   res.code(200).send({ url: session.url });
 });
 
->>>>>>> 7a91b37 (minor fixes)
 const start = async () => {
   try {
     await fastify.listen({ port: 3000 });
