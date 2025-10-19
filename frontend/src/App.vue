@@ -1,11 +1,14 @@
-<script setup></script>
+<script setup>
+import Footer from './components/Footer.vue';
+import Navigation from './components/Navigation.vue';
+import { useStore } from '@/store.js';
+
+const store = useStore();
+store.loadClasses();
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+    <Navigation />
+    <RouterView />
+    <Footer />
 </template>
-
-<style scoped></style>

@@ -1,8 +1,16 @@
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { google } from "googleapis";
 import { JWT } from "google-auth-library";
 
-const KEYS = JSON.parse(fs.readFileSync("google-application-credentials.json", "utf8"));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Correctly resolve path to credentials in the same directory
+const credentialsPath = path.join(__dirname, "google-application-credentials.json");
+
+const KEYS = JSON.parse(fs.readFileSync(credentialsPath , "utf8"));
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/calendar"];
 
 const authClient = new JWT({
