@@ -8,7 +8,7 @@ dotenv.config();
 
 const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
 const DOMAIN = "http://localhost:5173";
-STRIPE_KEY = process.env.STRIPE_KEY;
+const STRIPE_KEY = process.env.STRIPE_KEY;
 
 const fastify = Fastify({
   logger: true,
@@ -48,6 +48,32 @@ fastify.post("/api/postRegistration", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+fastify.post("/api/create-checkout-session", async (req, res) => {
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Premium Item",
+          },
+          unit_amount: 1999, // price in cents = $199.99
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${DOMAIN}?success=true`,
+    cancel_url: `${DOMAIN}?canceled=true`,
+  });
+
+  //res.code(303).redirect(session.url);
+  res.code(200).send({ url: session.url });
+});
+
+>>>>>>> 7a91b37 (minor fixes)
 const start = async () => {
   try {
     await fastify.listen({ port: 3000 });

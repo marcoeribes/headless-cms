@@ -19,3 +19,22 @@ export async function postRegistration(registration) {
     if (!res.ok) throw new Error('Failed to register');
     return res.json();
 }
+
+export async function redirectCheckout(form) {
+    try {
+        const res = await fetch(`${API_BASE}/create-checkout-session`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(form),
+        });
+        const data = await res.json();
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            alert('Failed to create checkout session');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Error creating session');
+    }
+}
