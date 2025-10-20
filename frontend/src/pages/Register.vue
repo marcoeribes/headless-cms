@@ -12,7 +12,7 @@ import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
 import RadioButton from 'primevue/radiobutton';
 import RadioButtonGroup from 'primevue/radiobuttongroup';
-import { postRegistration } from '@/api/events';
+import { postRegistration, redirectCheckout } from '@/api/events';
 
 const store = useStore();
 const route = useRoute();
@@ -39,6 +39,7 @@ const initialValues = ref({
     caseNumber: '',
 });
 
+/*
 const onFormSubmit = async ({ valid, values }) => {
     if (!valid) return;
 
@@ -46,6 +47,22 @@ const onFormSubmit = async ({ valid, values }) => {
 
     try {
         const response = await postRegistration(values);
+        console.log('✅ Registration successful:', response);
+    } catch (error) {
+        console.error('❌ Registration failed:', error);
+    }
+};*/
+
+const onFormSubmit = async ({ valid, values }) => {
+    if (!valid) return;
+
+    values.eventId = classId.value;
+
+    try {
+        const response = await redirectCheckout({
+            form: values,
+            event: c.value,
+        });
         console.log('✅ Registration successful:', response);
     } catch (error) {
         console.error('❌ Registration failed:', error);

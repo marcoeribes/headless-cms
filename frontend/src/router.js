@@ -5,6 +5,7 @@ import About from './pages/About.vue';
 import Faq from './pages/Faq.vue';
 import Class from './pages/Class.vue';
 import Register from './pages/Register.vue';
+import PaymentStatus from './pages/PaymentStatus.vue';
 
 const routes = [
     { path: '/', name: 'home', component: Home },
@@ -12,6 +13,7 @@ const routes = [
     { path: '/faq', name: 'faq', component: Faq },
     { path: '/class/:id', name: 'class', component: Class },
     { path: '/register/:id', name: 'register', component: Register },
+    { path: '/payment-status', name: 'payment-status', component: PaymentStatus },
 ];
 
 const router = createRouter({
