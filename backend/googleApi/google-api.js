@@ -49,7 +49,6 @@ export async function getCalendarEvents() {
   });
 
   const events = response.data.items;
-  console.log(events);
   if (!events || events.length === 0) {
     console.log("No upcoming events found.");
     return;
@@ -60,23 +59,10 @@ export async function getCalendarEvents() {
 export async function saveToSheet(data) {
   const sheets = google.sheets({ version: "v4", auth });
 
-  /*const values = data.map((item) => [
-    item.option,
-    item.firstName,
-    item.middleInitial,
-    item.lastName,
-    item.dob,
-    item.phone,
-    item.email,
-    item.licenseNumber,
-    item.caseNumber,
-  ]);*/
-
   const values = [
     [
-      data.id,
+      data.customerId,
       data.eventId,
-      data.option,
       data.firstName,
       data.middleInitial,
       data.lastName,
@@ -85,6 +71,8 @@ export async function saveToSheet(data) {
       data.email,
       data.dlNumber,
       data.caseNumber,
+      data.option,
+      data.stripeSessionId,
     ],
   ];
 
