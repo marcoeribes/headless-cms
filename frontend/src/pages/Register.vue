@@ -12,7 +12,7 @@ import FloatLabel from 'primevue/floatlabel';
 import Message from 'primevue/message';
 import RadioButton from 'primevue/radiobutton';
 import RadioButtonGroup from 'primevue/radiobuttongroup';
-import { postRegistration } from '@/api/events';
+import { redirectCheckout } from '@/api/events';
 
 const store = useStore();
 const route = useRoute();
@@ -45,10 +45,12 @@ const onFormSubmit = async ({ valid, values }) => {
     values.eventId = classId.value;
 
     try {
-        const response = await postRegistration(values);
-        console.log('✅ Registration successful:', response);
+        const response = await redirectCheckout({
+            registration: values,
+            event: c.value,
+        });
     } catch (error) {
-        console.error('❌ Registration failed:', error);
+        console.error('Registration failed:', error);
     }
 };
 

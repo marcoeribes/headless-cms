@@ -8,7 +8,11 @@ store.loadClasses();
 </script>
 
 <template>
-    <Navigation />
-    <RouterView />
-    <Footer />
+    <div class="min-h-screen flex flex-col">
+        <Navigation />
+        <main class="flex-1 flex items-center justify-center">
+            <RouterView />
+        </main>
+        <Footer />
+    </div>
 </template>

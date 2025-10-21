@@ -30,14 +30,11 @@ export function addTimeProperties(eventsArray) {
   return eventsArray;
 }
 
-export function idGenerator(registration) {
+export function idGenerator() {
   let result = "";
-  const chars = "0123456789abcdef";
-  for (let i = 0; i < 4; i++) {
+  const chars = "0123456789";
+  for (let i = 0; i < 7; i++) {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
-  return {
-    id: result,
-    ...registration,
-  };
+  return "c" + result;
 }
