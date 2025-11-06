@@ -92,52 +92,58 @@ const resolver = ({ values }) => {
     <div v-if="c" class="container mx-auto px-4 py-12 max-w-[1000px]">
         <Card class="p-6">
             <template #header>
-                <div class="text-2xl font-bold">{{ c.title }}</div>
-                <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4">
-                    <div class="md:w-40 relative">
-                        <div class="w-full aspect-[16/9]">
-                            <img
-                                class="w-full h-full object-cover object-center rounded"
-                                :src="c.imageUrl"
-                                :alt="c.title"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                        <div class="flex flex-col items-start gap-2">
-                            <span
-                                class="font-medium text-surface-500 dark:text-surface-400 text-sm flex items-center bg-surface-100 p-1 rounded-full"
+                <div class="p-6 border-b border-neutral-200/60 dark:border-neutral-800">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                        <!-- Image -->
+                        <div class="md:col-span-4">
+                            <div
+                                class="aspect-[16/9] overflow-hidden rounded-xl ring-1 ring-neutral-200/60 dark:ring-neutral-800"
                             >
-                                <i class="pi pi-calendar mr-1 text-base align-middle"></i>
-                                {{ c.month }} {{ c.day }} @ {{ c.startTime }} - {{ c.endTime }}
-                            </span>
-                            <span
-                                class="font-medium text-surface-500 dark:text-surface-400 text-sm flex items-center bg-surface-100 p-1 rounded-full"
-                            >
-                                <i class="pi pi-map-marker mr-1 text-base align-middle"></i>
-                                {{ c.location }}
-                            </span>
-                        </div>
-                        <div class="flex flex-col md:items-end gap-8">
-                            <span class="text-xl font-semibold">{{ c.price }}</span>
-                            <div class="flex flex-row-reverse md:flex-row gap-2">
-                                <Button
-                                    label="Details"
-                                    icon="pi pi-info-circle"
-                                    severity="info"
-                                    class="flex-auto md:flex-initial whitespace-nowrap"
-                                    @click="goToClassDetails(c)"
+                                <img
+                                    :src="c.imageUrl"
+                                    :alt="c.title"
+                                    class="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
                                 />
                             </div>
                         </div>
+
+                        <!-- Meta + Actions -->
+                        <div class="md:col-span-8 flex flex-col gap-4">
+                            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
+                                {{ c.title }}
+                            </h1>
+
+                            <!-- Chips / meta row -->
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full bg-surface-100 text-surface-600 dark:bg-neutral-800 dark:text-neutral-300 ring-1 ring-neutral-200/60 dark:ring-neutral-700"
+                                >
+                                    <i class="pi pi-calendar text-sm"></i>
+                                    <span>{{ c.month }} {{ c.day }} @ {{ c.startTime }} - {{ c.endTime }}</span>
+                                </span>
+
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full bg-surface-100 text-surface-600 dark:bg-neutral-800 dark:text-neutral-300 ring-1 ring-neutral-200/60 dark:ring-neutral-700"
+                                >
+                                    <i class="pi pi-map-marker text-sm"></i>
+                                    <span>{{ c.location }}</span>
+                                </span>
+                            </div>
+
+                            <!-- Price + CTA -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                                    {{ c.price }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <p class="mt-4"><i class="pi pi-info-circle"></i> {{ c.description }}</p>
                 </div>
             </template>
 
             <template #content>
-                <p class="mt-4"><i class="pi pi-info-circle"></i> {{ c.description }}</p>
-
                 <Form
                     v-slot="$form"
                     :initialValues="initialValues"
@@ -147,9 +153,7 @@ const resolver = ({ values }) => {
                     :validateOnBlur="true"
                     class="max-w-4xl mx-auto p-4 sm:p-6"
                 >
-                    <div
-                        class="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200/60 dark:border-neutral-800 p-4 sm:p-6 lg:p-8 space-y-8"
-                    >
+                    <div class="bg-white dark:bg-neutral-900 space-y-8">
                         <!-- Header -->
                         <div class="space-y-1">
                             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Applicant Info</h2>

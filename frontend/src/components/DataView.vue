@@ -22,9 +22,7 @@ function goToClassDetails(item) {
 
 <template>
     <div class="card">
-        <h3 class="text-2xl font-bold text-gray-800 text-center">
-            Upcoming Classes
-        </h3>
+        <h3 class="text-2xl font-bold text-gray-800 text-center">Upcoming Classes</h3>
         <DataView :value="classes" paginator :rows="5" :layout="layout">
             <template #list="slotProps">
                 <div class="flex flex-col">
@@ -32,8 +30,7 @@ function goToClassDetails(item) {
                         <div
                             class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
                             :class="{
-                                'border-t border-gray-200 dark:border-gray-600':
-                                    index !== 0,
+                                'border-t border-gray-200 dark:border-gray-600': index !== 0,
                             }"
                         >
                             <div class="md:w-40 relative">
@@ -45,41 +42,28 @@ function goToClassDetails(item) {
                                     />
                                 </div>
                             </div>
-                            <div
-                                class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6"
-                            >
+                            <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
                                 <div class="flex flex-col items-start gap-2">
-                                    <div
-                                        class="text-xl font-medium bg-surface-100 p-1 rounded-full"
-                                    >
+                                    <div class="text-xl font-medium bg-surface-100 p-1 rounded-full">
                                         {{ item.title }}
                                     </div>
                                     <span
                                         class="font-medium text-surface-500 dark:text-surface-400 text-sm flex items-center bg-surface-100 p-1 rounded-full"
                                     >
-                                        <i
-                                            class="pi pi-calendar mr-1 text-base align-middle"
-                                        ></i>
-                                        {{ item.month }} {{ item.day }} @
-                                        {{ item.startTime }} -
+                                        <i class="pi pi-calendar mr-1 text-base align-middle"></i>
+                                        {{ item.month }} {{ item.day }} @ {{ item.startTime }} -
                                         {{ item.endTime }}
                                     </span>
                                     <span
                                         class="font-medium text-surface-500 dark:text-surface-400 text-sm flex items-center bg-surface-100 p-1 rounded-full"
                                     >
-                                        <i
-                                            class="pi pi-map-marker mr-1 text-base align-middle"
-                                        ></i>
+                                        <i class="pi pi-map-marker mr-1 text-base align-middle"></i>
                                         {{ item.location }}
                                     </span>
                                 </div>
                                 <div class="flex flex-col md:items-end gap-8">
-                                    <span class="text-xl font-semibold">{{
-                                        item.price
-                                    }}</span>
-                                    <div
-                                        class="flex flex-row-reverse md:flex-row gap-2"
-                                    >
+                                    <span class="text-xl font-semibold">{{ item.price }}</span>
+                                    <div class="flex flex-row-reverse md:flex-row gap-2">
                                         <Button
                                             label="Details"
                                             icon="pi pi-info-circle"
