@@ -59,17 +59,18 @@ const resolver = ({ values }) => {
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const numericPattern = /^\d+$/;
+    const dobPattern = /^(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])(19\d{2}|200\d|201\d)$/;
 
     const requiredFields = ['options', 'firstName', 'lastName', 'dob', 'phone', 'email', 'dlNumber', 'caseNumber'];
 
     requiredFields.forEach((field) => {
         if (!values[field] || values[field].toString().trim() === '') {
-            errors[field] = [{ message: `${field} is required.` }];
+            errors[field] = [{ message: `Required` }];
         }
     });
 
-    if (values.dob && !values.dob.replace(/\D/g, '').match(numericPattern)) {
-        errors.dob = [{ message: 'Date of Birth must contain only numbers.' }];
+    if (values.dob && !values.dob.replace(/\D/g, '').match(dobPattern)) {
+        errors.dob = [{ message: 'Invalid date of birth' }];
     }
 
     if (values.phone && !values.phone.replace(/\D/g, '').match(numericPattern)) {
@@ -77,7 +78,7 @@ const resolver = ({ values }) => {
     }
 
     if (values.email && !emailPattern.test(values.email)) {
-        errors.email = [{ message: 'Invalid email address.' }];
+        errors.email = [{ message: 'Invalid email address' }];
     }
 
     return {
@@ -142,122 +143,231 @@ const resolver = ({ values }) => {
                     :initialValues="initialValues"
                     :resolver="resolver"
                     @submit="onFormSubmit"
-                    class="flex flex-col gap-6 mt-6"
+                    :validateOnValueUpdate="false"
+                    :validateOnBlur="true"
+                    class="max-w-4xl mx-auto p-4 sm:p-6"
                 >
-                    <!-- Radio Button Group -->
-                    <div>
-                        <label class="block mb-2 font-medium text-sm text-gray-700 dark:text-white"
-                            >Select an Option</label
-                        >
-                        <RadioButtonGroup name="option" class="flex flex-wrap gap-6">
-                            <div class="flex items-center gap-2">
-                                <RadioButton inputId="option1" value="option1" />
-                                <label for="option1" class="text-gray-700 dark:text-white">Option 1</label>
+                    <div
+                        class="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200/60 dark:border-neutral-800 p-4 sm:p-6 lg:p-8 space-y-8"
+                    >
+                        <!-- Header -->
+                        <div class="space-y-1">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Applicant Info</h2>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Please complete all required fields.</p>
+                        </div>
+
+                        <!-- Personal Details -->
+                        <section class="space-y-3">
+                            <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">Personal Details</h3>
+
+                            <!-- Row 1: Names -->
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-y-4 gap-x-6">
+                                <!-- First Name -->
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-5">
+                                    <FloatLabel variant="on">
+                                        <InputText
+                                            id="firstName"
+                                            name="firstName"
+                                            maxlength="35"
+                                            autocomplete="given-name"
+                                            class="w-full"
+                                        />
+                                        <label for="firstName">First Name</label>
+                                    </FloatLabel>
+                                    <Message
+                                        v-if="$form.firstName?.invalid"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                    >
+                                        {{ $form.firstName.error?.message }}
+                                    </Message>
+                                </div>
+
+                                <!-- Middle Initial (compact) -->
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-2">
+                                    <div class="max-w-24">
+                                        <FloatLabel variant="on">
+                                            <InputText
+                                                id="middleInitial"
+                                                name="middleInitial"
+                                                maxlength="1"
+                                                autocomplete="off"
+                                                class="w-full text-center tracking-wider"
+                                            />
+                                            <label for="middleInitial">M.I.</label>
+                                        </FloatLabel>
+                                    </div>
+                                    <Message
+                                        v-if="$form.middleInitial?.invalid"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                    >
+                                        {{ $form.middleInitial.error?.message }}
+                                    </Message>
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-5">
+                                    <FloatLabel variant="on">
+                                        <InputText
+                                            id="lastName"
+                                            name="lastName"
+                                            maxlength="35"
+                                            autocomplete="family-name"
+                                            class="w-full"
+                                        />
+                                        <label for="lastName">Last Name</label>
+                                    </FloatLabel>
+                                    <Message
+                                        v-if="$form.lastName?.invalid"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                    >
+                                        {{ $form.lastName.error?.message }}
+                                    </Message>
+                                </div>
+
+                                <!-- Row 2: DOB & DL -->
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-6">
+                                    <FloatLabel variant="on">
+                                        <InputMask
+                                            id="dob"
+                                            name="dob"
+                                            mask="99/99/9999"
+                                            placeholder="MM/DD/YYYY"
+                                            autocomplete="bday"
+                                            class="w-full"
+                                        />
+                                        <label for="dob">Date of Birth</label>
+                                    </FloatLabel>
+                                    <Message v-if="$form.dob?.invalid" severity="error" size="small" variant="simple">
+                                        {{ $form.dob.error?.message }}
+                                    </Message>
+                                </div>
+
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-6">
+                                    <FloatLabel variant="on">
+                                        <InputText
+                                            id="dlNumber"
+                                            name="dlNumber"
+                                            maxlength="9"
+                                            autocomplete="off"
+                                            class="w-full"
+                                        />
+                                        <label for="dlNumber">Driver License #</label>
+                                    </FloatLabel>
+                                    <Message
+                                        v-if="$form.dlNumber?.invalid"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                    >
+                                        {{ $form.dlNumber.error?.message }}
+                                    </Message>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <RadioButton inputId="option2" value="option2" />
-                                <label for="option2" class="text-gray-700 dark:text-white">Option 2</label>
+                        </section>
+
+                        <!-- Contact Details -->
+                        <section class="space-y-3">
+                            <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">Contact Details</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-y-4 gap-x-6">
+                                <!-- Phone -->
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-6">
+                                    <FloatLabel variant="on">
+                                        <InputMask
+                                            id="phone"
+                                            name="phone"
+                                            mask="(999) 999-9999"
+                                            placeholder="(555) 555-5555"
+                                            autocomplete="tel"
+                                            class="w-full"
+                                        />
+                                        <label for="phone">Phone Number</label>
+                                    </FloatLabel>
+                                    <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">
+                                        {{ $form.phone.error?.message }}
+                                    </Message>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-6">
+                                    <FloatLabel variant="on">
+                                        <InputText
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            autocomplete="email"
+                                            class="w-full"
+                                        />
+                                        <label for="email">Email Address</label>
+                                    </FloatLabel>
+                                    <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">
+                                        {{ $form.email.error?.message }}
+                                    </Message>
+                                </div>
                             </div>
-                        </RadioButtonGroup>
-                        <Message v-if="$form.options?.invalid" severity="error" size="small" variant="simple">{{
-                            $form.options.error?.message
-                        }}</Message>
-                    </div>
+                        </section>
 
-                    <!-- Input Fields Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- First Name -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputText id="firstName" name="firstName" maxlength="35" autocomplete="off" />
-                                <label for="firstName">First Name</label>
-                            </FloatLabel>
-                            <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.firstName.error?.message }}
-                            </Message>
+                        <!-- Additional Info -->
+                        <section class="space-y-3">
+                            <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">Additional Info</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-y-4 gap-x-6">
+                                <!-- Case Number -->
+                                <div class="flex flex-col gap-1 min-w-0 md:col-span-6">
+                                    <FloatLabel variant="on">
+                                        <InputText
+                                            id="caseNumber"
+                                            name="caseNumber"
+                                            autocomplete="off"
+                                            class="w-full"
+                                        />
+                                        <label for="caseNumber">Case #</label>
+                                    </FloatLabel>
+                                    <Message
+                                        v-if="$form.caseNumber?.invalid"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                    >
+                                        {{ $form.caseNumber.error?.message }}
+                                    </Message>
+                                </div>
+
+                                <!-- Option Selection -->
+                                <fieldset class="flex flex-col gap-2 md:col-span-6">
+                                    <legend class="block font-medium text-sm text-gray-700 dark:text-white">
+                                        Select an Option
+                                    </legend>
+                                    <RadioButtonGroup name="option" class="flex flex-wrap gap-4">
+                                        <div class="flex items-center gap-2">
+                                            <RadioButton inputId="option1" value="option1" />
+                                            <label for="option1" class="text-gray-700 dark:text-white">Option 1</label>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <RadioButton inputId="option2" value="option2" />
+                                            <label for="option2" class="text-gray-700 dark:text-white">Option 2</label>
+                                        </div>
+                                    </RadioButtonGroup>
+                                    <Message
+                                        v-if="$form.option?.invalid"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                    >
+                                        {{ $form.option.error?.message }}
+                                    </Message>
+                                </fieldset>
+                            </div>
+                        </section>
+
+                        <!-- Actions -->
+                        <div class="flex justify-center pt-2">
+                            <Button type="submit" label="Submit" class="w-full sm:w-auto" />
                         </div>
-
-                        <!-- Middle Initial -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputText id="middleInitial" name="middleInitial" maxlength="1" autocomplete="off" />
-                                <label for="middleInitial">Middle Initial</label>
-                            </FloatLabel>
-                            <Message v-if="$form.middleInitial?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.middleInitial.error?.message }}
-                            </Message>
-                        </div>
-
-                        <!-- Last Name -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputText id="lastName" name="lastName" maxlength="35" autocomplete="off" />
-                                <label for="lastName">Last Name</label>
-                            </FloatLabel>
-                            <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.lastName.error?.message }}
-                            </Message>
-                        </div>
-
-                        <!-- Date of Birth -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputMask id="dob" name="dob" mask="99/99/9999" />
-                                <label for="dob">Date of Birth</label>
-                            </FloatLabel>
-                            <Message v-if="$form.dob?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.dob.error?.message }}
-                            </Message>
-                        </div>
-
-                        <!-- Phone Number -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputMask id="phone" name="phone" mask="(999) 999-9999" />
-                                <label for="phone">Phone Number</label>
-                            </FloatLabel>
-                            <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.phone.error?.message }}
-                            </Message>
-                        </div>
-
-                        <!-- Email Address -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputText id="email" name="email" type="email" autocomplete="off" />
-                                <label for="email">Email Address</label>
-                            </FloatLabel>
-                            <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.email.error?.message }}
-                            </Message>
-                        </div>
-
-                        <!-- Driver License # -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputText id="dlNumber" name="dlNumber" maxlength="9" autocomplete="off" />
-                                <label for="dlNumber">Driver License #</label>
-                            </FloatLabel>
-                            <Message v-if="$form.dlNumber?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.dlNumber.error?.message }}
-                            </Message>
-                        </div>
-
-                        <!-- Case Number -->
-                        <div class="flex flex-col gap-1">
-                            <FloatLabel variant="on">
-                                <InputText id="caseNumber" name="caseNumber" autocomplete="off" />
-                                <label for="caseNumber">Case #</label>
-                            </FloatLabel>
-                            <Message v-if="$form.caseNumber?.invalid" severity="error" size="small" variant="simple">
-                                {{ $form.caseNumber.error?.message }}
-                            </Message>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="flex justify-end">
-                        <Button type="submit" label="Submit" class="w-full sm:w-auto" />
                     </div>
                 </Form>
             </template>
