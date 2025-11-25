@@ -49,7 +49,7 @@ function goToRegistration(c) {
                         </template>
 
                         <template #content>
-                            <p>
+                            <p class="mt-4">
                                 <i class="pi pi-info-circle"></i>
                                 {{ c.description }}
                             </p>
@@ -59,8 +59,7 @@ function goToRegistration(c) {
                             </Divider>
                             <p>
                                 <i class="pi pi-calendar"></i>
-                                <strong>Date:</strong> {{ c.month }}
-                                {{ c.day }} @ {{ c.startTime }} -
+                                <strong>Date:</strong> {{ c.month }} {{ c.day }} @ {{ c.startTime }} -
                                 {{ c.endTime }}
                             </p>
 
@@ -112,24 +111,11 @@ function goToRegistration(c) {
                 </div>
             </div>
 
-            <div
-                v-if="c"
-                class="lg:w-3/8 w-full flex flex-col justify-evenly items-center gap-4"
-            >
-                <div
-                    v-if="c.imageUrl"
-                    class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative"
-                >
-                    <img
-                        :src="c.imageUrl"
-                        alt="Location image"
-                        class="w-full h-full object-cover rounded-xl"
-                    />
+            <div v-if="c" class="lg:w-3/8 w-full flex flex-col justify-evenly items-center gap-4">
+                <div v-if="c.imageUrl" class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative">
+                    <img :src="c.imageUrl" alt="Location image" class="w-full h-full object-cover rounded-xl" />
                 </div>
-                <div
-                    v-if="c.location"
-                    class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative"
-                >
+                <div v-if="c.location" class="w-full max-w-[600px] aspect-[4/3] rounded-xl overflow-hidden relative">
                     <iframe
                         :src="mapUrl"
                         class="absolute top-0 left-0 w-full h-full border-0 rounded-xl"
