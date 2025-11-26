@@ -3,7 +3,7 @@ import * as ga from "./googleApi/google-api.js";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import fastifyRawBody from "fastify-raw-body";
-import { addTimeProperties, idGenerator } from "./service.js";
+import { addTimeProperties, idGenerator, getTimestamp } from "./service.js";
 import Stripe from "stripe";
 
 dotenv.config();
@@ -159,6 +159,7 @@ fastify.route({
           dlNumber: session.metadata.dlNumber,
           caseNumber: session.metadata.caseNumber,
           option: session.metadata.option,
+          timestamp: getTimestamp(),
           stripeSessionId: session.id,
         };
 

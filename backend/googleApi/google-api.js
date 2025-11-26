@@ -72,6 +72,7 @@ export async function saveToSheet(data) {
       data.dlNumber,
       data.caseNumber,
       data.option,
+      data.timestamp,
       data.stripeSessionId,
     ],
   ];
