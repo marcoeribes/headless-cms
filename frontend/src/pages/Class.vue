@@ -39,7 +39,7 @@ function goToRegistration(c) {
 
 <template>
     <div class="page-container px-4 py-6 flex justify-center">
-        <div class="flex flex-col lg:flex-row gap-6 max-w-[1200px]">
+        <div class="flex flex-col lg:flex-row-reverse gap-6 max-w-[1200px]">
             <!-- Left Column -->
             <div class="lg:w-5/8 w-full flex flex-col">
                 <div v-if="c" class="flex-1">
