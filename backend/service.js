@@ -38,3 +38,16 @@ export function idGenerator() {
   }
   return "c" + result;
 }
+
+export function getTimestamp() {
+  return new Date().toLocaleString("en-US", {
+    timeZone: "America/Phoenix",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+}

@@ -1,30 +1,29 @@
-/* 
-* Google Apps Script to send data from Google Spreadsheets to Google Calendar
-*/
+/*
+ * Google Apps Script to send data from Google Spreadsheets to Google Calendar
+ */
 
-const CALENDAR_ID = 'your calendar ID'
-const WEBSITE = 'your website'
+const CALENDAR_ID =
+  "fea36fefd66cf60e363e16dbb4981172875779e12da7881227802bca853b68c1@group.calendar.google.com";
 
 function createorUpdateEvents() {
-
   /*
-  * Open the Calendar
-  */
+   * Open the Calendar
+   */
   const calendarId = CALENDAR_ID;
   const sheet = SpreadsheetApp.getActiveSheet();
 
   /*
-  * Import events data from the spreadsheet
-  */
+   * Import events data from the spreadsheet
+   */
   const events = sheet.getRange("A2:G999").getValues();
 
   /*
-  * Event details for creating an event
-  */
+   * Event details for creating an event
+   */
 
   let event; // Declare event variable outside the loop
 
-  for ( i = 0; i < events.length; i++ ) {
+  for (i = 0; i < events.length; i++) {
     const shift = events[i];
     const eventID = shift[0];
     const eventsubject = shift[1];
@@ -32,37 +31,36 @@ function createorUpdateEvents() {
     const endTime = shift[3];
     const location = shift[4];
     const description = shift[5];
-    const color = shift[6];
+    const color = shift[9];
 
-     // Check if all variables are defined
-      if (
-        eventID !== undefined && 
-        eventsubject !== undefined && 
-        description !== undefined && 
-        color !== undefined && 
-        startTime instanceof Date && 
-        endTime instanceof Date
-        ) {
-        const event = {
-            id: eventID,
-            summary: eventsubject,
-            description: `http://localhost:5173/class/${eventID}`,
-            location: location,
-            'start': {
-                'dateTime': startTime.toISOString(),
-                'timeZone': 'America/Phoenix'
-            },
-            'end': {
-                'dateTime': endTime.toISOString(),
-                'timeZone': 'America/Phoenix'
-            },
-            colorId: color
-        };
+    // Check if all variables are defined
+    if (
+      eventID !== undefined &&
+      eventsubject !== undefined &&
+      description !== undefined &&
+      startTime instanceof Date &&
+      endTime instanceof Date
+    ) {
+      const event = {
+        id: eventID,
+        summary: eventsubject,
+        description: `<a href="http://localhost:5173/class/${eventID}">View Class Details</a>`,
+        location: location,
+        start: {
+          dateTime: startTime.toISOString(),
+          timeZone: "America/Phoenix",
+        },
+        end: {
+          dateTime: endTime.toISOString(),
+          timeZone: "America/Phoenix",
+        },
+        colorId: color ?? Math.floor(Math.random() * 11) + 1,
+      };
 
-        /** 
-        * Insert or update event
-        **/
-       try {
+      /**
+       * Insert or update event
+       **/
+      try {
         let createOrUpdate;
         if (event.id) {
           createOrUpdate = Calendar.Events.update(event, calendarId, eventID);
@@ -114,21 +112,22 @@ function createorUpdateEvents() {
 
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('Sync Data with Calendar')
-    .addItem('Calendar to Sheet', 'exportCalendarEventsToSheet')
-    .addItem('Sheet to Calendar', 'createorUpdateEvents')
+  ui.createMenu("Sync Data with Calendar")
+    //.addItem('Calendar to Sheet', 'exportCalendarEventsToSheet')
+    .addItem("Sheet to Calendar", "createorUpdateEvents")
     .addSeparator()
     .addSubMenu(
-      ui.createMenu('About')
-        .addItem('Documentation', 'showDocumentation')
+      ui.createMenu("About").addItem("Documentation", "showDocumentation")
     )
     .addToUi();
 }
 
 function showDocumentation() {
-  var htmlOutput = HtmlService.createHtmlOutput('<p>For more info, visit <a href="https://github.com/sarahcssiqueira/google-sheets-calendar-synchronizer" target="_blank">this link</a>.');
+  var htmlOutput = HtmlService.createHtmlOutput(
+    '<p>For more info, visit <a href="https://github.com/sarahcssiqueira/google-sheets-calendar-synchronizer" target="_blank">this link</a>.'
+  );
   var ui = SpreadsheetApp.getUi();
-  ui.showModalDialog(htmlOutput, 'Documentation');
+  ui.showModalDialog(htmlOutput, "Documentation");
 }
 
 function closeDialog() {
